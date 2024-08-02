@@ -1,6 +1,8 @@
 import {React, useState} from 'react'
 import { login } from '../api'
 import Sup from "../assets/signup.png";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
@@ -49,7 +51,18 @@ const SignIn = () => {
             </div>
           </form>
           {error && <p>{error}</p>}
-        <div className='w-1/2 h-full border-l-2 border-black'></div>
+        <div className='w-1/2 h-full border-l-2 border-black'>
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
+              console.log(credentialResponseDecoded);
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+            useOneTap
+          />;
+        </div>
       </div>
     </div>
   </div>
